@@ -53,7 +53,7 @@ print ("flatten shape", l3.output_shape)
 l4 = Dense(1)
 model.add(l4)
 print ("Dense shape", l4.output_shape)
-
 model.compile(loss='mse',optimizer='adam')
 model.fit(X_train, Y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
+
 model.save('model.h5')
