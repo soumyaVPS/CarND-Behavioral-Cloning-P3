@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import shutil
 
+import cv2
 import numpy as np
 import socketio
 import eventlet
@@ -59,9 +60,23 @@ def telemetry(sid, data):
         speed = data["speed"]
         # The current image from the center camera of the car
         imgString = data["image"]
+        '''
+        image = Image.open(BytesIO(base64.b64decode(imgString)))
+
+        image_array = np.asarray(image)
+
+        img_g = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY)
+        image_array = np.expand_dims(img_g, 3)
+
+        steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
+
+        '''
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
+        image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2HSV)
+        mychannels = cv2.split(image_array)
+        image_array = mychannels[1]
+        steering_angle = float(model.predict(image_array[None, :, :, None], batch_size=1))
 
         throttle = controller.update(float(speed))
 
