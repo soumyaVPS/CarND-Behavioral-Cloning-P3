@@ -54,37 +54,43 @@ The model.py file contains the code for training and saving the convolution neur
 
 ####1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model consists of a convolution neural network with 5x5 filter sizes and depths between 6 and 16 (model.py lines 79-81) 
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU layers to introduce nonlinearity (code line ), and the data is normalized in the model using a Keras lambda layer (code line 78). 
 
 ####2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout layers in order to reduce overfitting (model.py lines 89 and 86). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 12-72). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 ####3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 91).
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road(code 51 to 57)  
 
 For details about how I created the training data, see the next section. 
 
 ###Model Architecture and Training Strategy
 
+1.collected data over 2 rounds forward
+2. rounds of data in reverse
+3. Used left, right and center camera images, took inverse of those as well to get more training data.
+4. Using a separate recording of test data for validation failed to give correct values for angles, so I had to split the data collected for training (80-20 split) for validation purposes as well.
+
 ####1. Solution Design Approach
 
 The overall strategy for deriving a model architecture was to ...
-
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
-
+The key to get my model working was using S channel data for the image.  
+My first step was to use a convolution neural network model similar to traffic sign classifier, I thought this model might be appropriate because the angle decision was treated as a classification problem just like the traffic signs project (based on lenet). 
+I did not have to modify the model much from my submission for Traffic sign classifier. 
+ 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I modified the model so that ...
+To combat the overfitting, I modified the data as opposed to model to extract a validation set from training data  
 
 Then I ... 
 
@@ -94,7 +100,18 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 76-90) consisted of a convolution neural network with the following layers and layer sizes ...
+1. convolution 6,5,5
+2. max pool 2,2 pool_size
+3 convolution 16,5,5
+4. Max pool 2,2 pool sise
+5 Fully connected layer 120 input
+Relu activation 
+Dropout (0.5)
+FC of 84
+Relu
+Dropout (0.5)
+FC of 1
 
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
